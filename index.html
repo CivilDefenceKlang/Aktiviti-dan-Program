@@ -231,8 +231,14 @@
       color: #e5e7eb;
     }
 
-    .col-tarikh {
+    /* Kolum tarikh kecil & tetap */
+    th.col-tarikh,
+    td.col-tarikh {
+      width: 90px;
+      min-width: 90px;
+      max-width: 90px;
       white-space: nowrap;
+      text-align: center;
       font-weight: 600;
       font-size: 0.85rem;
     }
@@ -245,6 +251,13 @@
     .col-catat {
       font-size: 0.82rem;
       color: var(--muted);
+    }
+
+    /* Pastikan teks selain tarikh boleh wrap */
+    td.col-perihal,
+    td.col-tempat,
+    td.col-catat {
+      white-space: normal !important;
     }
 
     .status-bar {
@@ -264,6 +277,7 @@
       margin-top: 5px;
     }
 
+    /* MODE MOBILE: setiap row jadi macam "kad" supaya catatan jelas dibaca */
     @media (max-width: 640px) {
       header h1 {
         font-size: 1.3rem;
@@ -273,16 +287,68 @@
         padding: 10px;
       }
 
-      th, td {
-        padding: 7px 8px;
+      .table-wrapper {
+        max-height: none;
       }
 
-      table {
-        font-size: 0.82rem;
+      table,
+      thead,
+      tbody,
+      th,
+      td,
+      tr {
+        display: block;
+      }
+
+      thead {
+        display: none;
       }
 
       .table-wrapper {
-        max-height: 65vh;
+        border: none;
+        background: transparent;
+      }
+
+      tbody {
+        display: block;
+      }
+
+      tr {
+        margin-bottom: 12px;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        background: rgba(15, 23, 42, 0.9);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      td {
+        border: none;
+        padding: 6px 6px;
+        position: relative;
+        padding-left: 90px; /* ruang untuk label kiri */
+        min-height: 26px;
+        font-size: 0.8rem;
+      }
+
+      td::before {
+        position: absolute;
+        left: 10px;
+        top: 6px;
+        width: 70px;
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: capitalize;
+      }
+
+      td.col-tarikh::before { content: "Tarikh"; }
+      td.col-perihal::before { content: "Perihal"; }
+      td.col-tempat::before { content: "Tempat"; }
+      td.col-catat::before { content: "Catatan"; }
+
+      td.col-tarikh {
+        text-align: left;
       }
     }
   </style>
@@ -291,6 +357,7 @@
   <div class="container">
     <header>
       <h1>Paparan Aktiviti / Program APM Daerah Klang</h1>
+      <p>Senarai program & aktiviti yang direkodkan dalam Google Sheets (Apps Script API).</p>
     </header>
 
     <div class="card">
@@ -498,6 +565,7 @@
         const th = document.createElement("th");
         // Papar nama original header dari sheet
         th.textContent = actualKey;
+        if (logical === "tarikh") th.classList.add("col-tarikh");
         tableHeadRow.appendChild(th);
       });
 
@@ -593,3 +661,4 @@
   </script>
 </body>
 </html>
+
